@@ -7,6 +7,7 @@ public class HospitalSystem {
 	private int nextDoctorId = 2000;
 	private int nextAppointmentId = 3000;
 	private int nextBillid = 4000;
+
 	private List<Patient> patients = new ArrayList<>();
 	private List<Doctor> doctors = new ArrayList<>();
 	private List<Appointment> appointments = new ArrayList<>();
@@ -14,15 +15,17 @@ public class HospitalSystem {
 	private List<Department> departments = new ArrayList<>();
 
 	public HospitalSystem() {
+		// Constructor initialises the system with empty lists
 	}
 
+	// Registers a new patient and assigns a unique ID
 	public void addPatient(Patient patient) {
 		patient.setId(nextPatientId);
 		patients.add(patient);
 		nextPatientId++;
-
 	}
 
+	// Removes a patient from the system using their ID
 	public void deletePatient(int patientId) {
 		for (int i = 0; i < patients.size(); i++) {
 			if (patients.get(i).getId() == patientId) {
@@ -32,6 +35,7 @@ public class HospitalSystem {
 		}
 	}
 
+	// Finds and returns a patient by their ID
 	public Patient searchPatientByPateindId(int patientId) {
 		for (int i = 0; i < patients.size(); i++) {
 			if (patients.get(i).getId() == patientId) {
@@ -41,12 +45,14 @@ public class HospitalSystem {
 		return null;
 	}
 
+	// Adds a new doctor and sets a unique ID
 	public void addDoctor(Doctor doctor) {
 		doctor.setId(nextDoctorId);
 		doctors.add(doctor);
 		nextDoctorId++;
 	}
 
+	// Removes a doctor from the system using their ID
 	public void deleteDoctor(int doctorId) {
 		for (int i = 0; i < doctors.size(); i++) {
 			if (doctors.get(i).getId() == doctorId) {
@@ -56,8 +62,9 @@ public class HospitalSystem {
 		}
 	}
 
+	// Searches for a doctor using their unique ID
 	public Doctor searchDoctorById(int doctorId) {
-		for (int i = 0; i < patients.size(); i++) {
+		for (int i = 0; i < doctors.size(); i++) {
 			if (doctors.get(i).getId() == doctorId) {
 				return doctors.get(i);
 			}
@@ -65,21 +72,20 @@ public class HospitalSystem {
 		return null;
 	}
 
-	// Schedule if the Doctor is available at the specified time
+	// Schedules a new appointment if the doctor is available at that time
 	public Boolean scheduleAppointment(Appointment appointment) {
 		for (Appointment a : appointments) {
 			if (a.getDoctorID() == appointment.getDoctorID()
 					&& a.getAppointmentDate().equals(appointment.getAppointmentDate())
 					&& a.getAppointmentStatus() != AppointmentStatus.CANCELLED)
-				// Doctor already has an appointment at this time
-				return false;
-
+				return false; // Slot already taken
 		}
 		appointments.add(appointment);
 		appointment.confirmAppointment();
 		return true;
 	}
 
+	// Cancels an appointment using its ID
 	public Boolean cancelAppointmentById(int appointmentId) {
 		for (Appointment a : appointments) {
 			if (a.getAppointmentID() == appointmentId) {
@@ -90,6 +96,7 @@ public class HospitalSystem {
 		return false;
 	}
 
+	// Searches for an appointment using its ID
 	public Appointment searchAppointmentById(int appointmentId) {
 		for (Appointment a : appointments) {
 			if (a.getAppointmentID() == appointmentId) {
@@ -99,27 +106,44 @@ public class HospitalSystem {
 		return null;
 	}
 
+	// Adds a new bill and prints the invoice
 	public void generateBill(Bill bill) {
-
+		bills.add(bill);
+		bill.generateInvoice();
 	}
 
+	// Searches for a bill using its ID
 	public Bill searchBillById(int billId) {
-		return null;
+		for (Bill bill : bills) {
+			if (bill.getBillId() == billId) {
+				return bill;
+			}
+		}
+		return null; // Not found
 	}
 
+
+	// calculate the amount due for a bill
 	public double caclualtePayment(int billId) {
-		return billId;
-
+		for (Bill b : bills) {
+			if (b.getBillId() == billId) {
+				return b.getAmount();
+			}
+		}
+		return 0; //billId not found
 	}
 
+	// Adds a new department to the hospital
 	public void addDepartment(Department department) {
 		departments.add(department);
 	}
 
+	// Links a doctor to a specific department
 	public void assignDoctorToDepartment(int departmentId, Doctor doctor) {
 		doctor.setDepartmentID(departmentId);
 	}
 
+	// Prints basic info of all patients
 	public void generatePatientReport() {
 		for (Patient p : patients) {
 			p.displayDetails();
@@ -127,39 +151,45 @@ public class HospitalSystem {
 		}
 	}
 
+	// Displays info for all doctors in the system
 	public void generateDoctorReport() {
-		
-		for(Doctor d : doctors) {
+		for (Doctor d : doctors) {
 			d.displayDetails();
 			System.out.println();
 		}
 	}
 
+	// Shows all scheduled appointments (not formatted yet)
 	public void generateAppointmentReport() {
-		for(Appointment a : appointments) {
-			a.toString();
+		for (Appointment a : appointments) {
+			System.out.println(a.toString());
 			System.out.println();
 		}
 	}
 
+	//list all generated bills
 	public void generateBillingReport() {
-
+		for (Bill b : bills) {
+			b.generateInvoice();
+			System.out.println();
+		}
 	}
 
+	// Displays details of every department
 	public void generateDepartmentReport() {
-		for (Department d: departments) {
+		for (Department d : departments) {
 			d.displayDepartmentetails();
 			System.out.println();
 		}
 	}
 
+	// Placeholder: would save hospital data to external files
 	public void saveDataToFiles() {
-
 	}
 
+	// Placeholder: would load hospital data from files
 	public void loadDataFromFiles() {
-
 	}
-
 }
+
 
