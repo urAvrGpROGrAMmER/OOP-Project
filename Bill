@@ -1,0 +1,65 @@
+import java.util.List;
+import java.util.ArrayList;
+public class Bill implements Payable {
+	
+	private static final long serialVersionUID = 1L;
+	private int billId;
+	public int getBillId() {
+		return billId;
+	}
+
+	public void setBillId(int billId) {
+		this.billId = billId;
+	}
+
+	public int getPatientID() {
+		return patientID;
+	}
+
+	public void setPatientID(int patientID) {
+		this.patientID = patientID;
+	}
+
+	public double getAmount() {
+		return amount;
+	}
+
+	public void setAmount(double amount) {
+		this.amount = amount;
+	}
+
+	private int patientID;
+	private double amount;
+	private List<String> services = new ArrayList<>();
+	private String date;
+	
+	public Bill(int billId, int patientID, String date) {
+		super();
+		this.billId = billId;
+		this.patientID = patientID;
+		this.date = date;
+	}
+	
+	public void addService(String service) {
+		services.add(service);
+	}
+	
+	public void generateInvoice() {
+		System.out.println("----- Invoice -----");
+		System.out.println("Bill ID    : " + billId);
+		System.out.println("Patient ID : " + patientID);
+		System.out.println("Date       : " + date);
+		System.out.println("Services   :");
+		for (String service : services) {
+			System.out.println("  - " + service);
+		}
+		System.out.println("Total Amount: $" + amount);
+		System.out.println("-------------------");
+	}
+
+	@Override
+	public double calculatePayment(int billId) {
+		return amount;
+	}
+	
+}
